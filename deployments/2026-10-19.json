@@ -1,0 +1,34 @@
+{
+  "capturedAt": "2026-10-19T20:14:32.483Z",
+  "deployments": [
+    {
+      "kind": "auction",
+      "chainId": 8453,
+      "address": "0xFd8126142d2C6c4FA4c0DFe6694FF71413666D38",
+      "transactionHash": "0x0498b661639c22b6bb75b2097c055b363d08ca5189a60208ddc0702c5765812a",
+      "blockNumber": "52825674",
+      "owner": "0xabA3A04FC85Fd7bBC2538E708e9E30bbc59899C3",
+      "income": "0x42469B0A89cE1215E72AD1f8f5D03aD4776c1fcb",
+      "originalCollection": "0x19b703f65aA7E1E775BD06c2aa0D0d08c80f1C45",
+      "reviewedSourceRevision": "08800637a08a832d121e9fbd7b62117fabd80e3e",
+      "creationCodeHash": "0x5831cd16cf657c12951f18605584b160f90ea816fe95ef6ef0b64f3978a9eff4",
+      "runtimeCodeHash": "0xa9866af059d8db3305e57f36e3b8cedcea34bb034d966a6945679ffb8be485ac",
+      "verifiedAt": "2026-10-19T20:14:30.702Z"
+    },
+    {
+      "kind": "editions",
+      "chainId": 1,
+      "address": "0x3e290d6f5C66b1FAABd072Db9E0d223EDEfC7ab5",
+      "transactionHash": "0x576fcb07b0b790826077a081d4c5f7ae56dfcc942aa99030386585087d2195a8",
+      "blockNumber": "26228933",
+      "owner": "0xabA3A04FC85Fd7bBC2538E708e9E30bbc59899C3",
+      "income": "0x42469B0A89cE1215E72AD1f8f5D03aD4776c1fcb",
+      "originalCollection": "0x19b703f65aA7E1E775BD06c2aa0D0d08c80f1C45",
+      "paymentToken": "0x0000000000000000000000000000000000000000",
+      "reviewedSourceRevision": "08800637a08a832d121e9fbd7b62117fabd80e3e",
+      "creationCodeHash": "0xfdfd267e4dc5e479c0f09abefed898865bf97c970ab65aa44a12f04ce8bca53c",
+      "runtimeCodeHash": "0x42b9aabc96729fdc095b4ccc0b51bb410f179753ce2e259f634c92fad48827e3",
+      "verifiedAt": "2026-10-19T20:14:32.483Z"
+    }
+  ]
+}

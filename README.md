@@ -1,6 +1,6 @@
 # Song A Day auctions and patron editions
 
-Replacement no-reserve Base auctions and Ethereum mainnet soulbound patron editions for [songaday.world](https://songaday.world). Development source; no new contracts have been deployed. Existing mainnet originals remain in their existing contract and are delivered through the Toolkit operator workflow.
+Replacement no-reserve Base auctions and Ethereum mainnet soulbound patron editions for [songaday.world](https://songaday.world). Both contracts were deployed and verified on 2026-10-19; see the [deployment record](deployments/2026-10-19.json). Existing mainnet originals remain in their existing contract and are delivered through the Toolkit operator workflow.
 
 ## Contracts and integration
 
@@ -9,7 +9,7 @@ Replacement no-reserve Base auctions and Ethereum mainnet soulbound patron editi
 - [`integration/`](integration/): unsigned Toolkit settlement and deadline planners. Reads finalized Base winners and current mainnet ownership/history, prepares mint OR transfer calls, rereads the actual owner after minting (including treasury mints), and refuses replay after an original has moved.
 - [`relay/`](relay/): disabled-by-default Cloudflare scheduled Worker that mirrors bidding extensions to the mainnet edition deadline using a restricted, dedicated signer. Permanent sale closing requires finalized Base state.
 
-The existing original mainnet collection is unchanged. The contracts are nonupgradeable and do not bridge NFTs. An operator still mints/distributes the original through the Toolkit workflow. No new contract is deployed and no live site or Toolkit screen has been switched.
+The existing original mainnet collection is unchanged. The contracts are nonupgradeable and do not bridge NFTs. An operator still mints/distributes the original through the Toolkit workflow. The public auction cutover remains disabled while index, relay, and live wallet rehearsal checks are completed.
 
 ## Local development
 

@@ -1,6 +1,13 @@
-# Undeployed contracts and decisions before release
+# Deployed contracts and release checklist
 
-No new production contract, live auction, DNS entry, application configuration or existing NFT contract was changed. This implementation is source and tests, a safe settlement planning boundary, and deployment helpers. Toolkit/browser wiring and the actual production cutover are separate release work. The original mainnet contract remains `0x19b703f65aA7E1E775BD06c2aa0D0d08c80f1C45`.
+Jonathan deployed both contracts with Rabby on 2026-10-19. Their creation transactions, canonical receipts, exact reviewed runtime code, owner, collection, and constructor settings were verified on-chain. The [deployment record](../deployments/2026-10-19.json) stores addresses, transaction hashes, deployment blocks, code hashes, and reviewed source revision.
+
+| Contract | Network | Address | Deployment block |
+| --- | --- | --- | --- |
+| Auction | Base (8453) | `0xFd8126142d2C6c4FA4c0DFe6694FF71413666D38` | `52825674` |
+| Soulbound editions | Ethereum (1) | `0x3e290d6f5C66b1FAABd072Db9E0d223EDEfC7ab5` | `26228933` |
+
+The public cutover remains disabled. Index and relay deployment, explorer source publication, and a live wallet rehearsal remain pending. The original mainnet collection remains `0x19b703f65aA7E1E775BD06c2aa0D0d08c80f1C45`.
 
 ## Product choices still to confirm
 
@@ -14,7 +21,7 @@ No new production contract, live auction, DNS entry, application configuration o
 
 `script/Deploy.s.sol` has separate `DeployBaseAuction` and `DeployMainnetEditions` helpers. The Base helper refuses chains other than 8453 and 84532; the mainnet helper requires chain 1 and the real existing original contract. Local tests deploy mocks directly. Both helpers use explicit owner/beneficiary/payment-token environment variables and accept no source-code private key. Owner should be a reviewed operational wallet or Safe; role grants are subsequent explicit owner actions. Ownership requires two-step acceptance for later rotations; manager grants remain until revoked.
 
-Running a Foundry script without `--broadcast` simulates only. Do not add `--broadcast`, use a signer, or submit a Safe deployment without the separately authorized deployment step. No production address for either new contract exists in this repo.
+Running a Foundry script without `--broadcast` simulates only. Do not add `--broadcast`, use a signer, or submit a Safe deployment without the separately authorized deployment step. The recorded production contracts already exist; do not deploy replacements as part of configuration or verification.
 
 ## Release and integration sequence
 
