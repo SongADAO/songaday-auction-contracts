@@ -23,7 +23,7 @@ function fixture(overrides = {}) {
   const state = {
     tokenOwner: SAFE, collectionOwner: SAFE, approved: ZERO_ADDRESS, operatorApproved: false,
     frequency: 100n, previousTreasuryMint: 1_000n, originalCollection: ORIGINAL_COLLECTION, originalChainId: 1n,
-    ownerError: undefined, simulateError: undefined,
+    ownerError: undefined, simulateError: undefined, transferHistory: undefined,
     auction: {
       startTime: 1_000n, endTime: 2_000n, incrementBps: 1000, extensionWindow: 300,
       highestBid: 10_000n, bidder: BIDDER, recipient: RECIPIENT, beneficiary: TREASURY,
@@ -55,6 +55,14 @@ function fixture(overrides = {}) {
     mainnetClient: {
       chain: { id: 1 }, getChainId: async () => 1,
       getBlock: async (request) => { assert.equal(request.blockTag, 'finalized'); return blocks.mainnet; },
+      getLogs: async (request) => {
+        assert.equal(request.address, ORIGINAL_COLLECTION);
+        assert.equal(request.fromBlock, 0n);
+        assert.equal(request.toBlock, blocks.mainnet.number);
+        assert.deepEqual(request.args, { tokenId: SONG_ID });
+        assert.equal(request.strict, true);
+        return state.transferHistory ?? [{ args: { from: ZERO_ADDRESS, to: state.tokenOwner, tokenId: SONG_ID } }];
+      },
       readContract: async (request) => {
         reads.push({ chain: 'mainnet', ...request });
         assert.equal(request.address, ORIGINAL_COLLECTION);
@@ -221,6 +229,40 @@ test('already-delivered originals produce no duplicate mint or transfer', async 
   const plan = await buildSettlementPlan(options);
   assert.equal(plan.status, 'already-delivered');
   assert.deepEqual(plan.calls, []);
+  assert.equal(simulations.length, 0);
+});
+
+test('a completed original delivery cannot be replayed when the winner sells back to an admin', async () => {
+  const { options, state } = fixture();
+  assert.equal((await buildSettlementPlan(options)).status, 'transfer-ready');
+  state.tokenOwner = RECIPIENT;
+  assert.equal((await buildSettlementPlan(options)).status, 'already-delivered');
+  state.transferHistory = [
+    { args: { from: ZERO_ADDRESS, to: SAFE, tokenId: SONG_ID } },
+    { args: { from: SAFE, to: RECIPIENT, tokenId: SONG_ID } },
+    { args: { from: RECIPIENT, to: SAFE, tokenId: SONG_ID } },
+  ];
+  state.tokenOwner = SAFE;
+  const replay = await buildSettlementPlan(options);
+  assert.equal(replay.status, 'manual-review');
+  assert.deepEqual(replay.calls, []);
+  assert.match(replay.notes.at(-1), /reacquired/);
+});
+
+test('missing, malformed, mismatching or unavailable transfer history never authorizes transfer', async () => {
+  const cases = [[], {}, [{ args: {} }],
+    [{ args: { from: ZERO_ADDRESS, to: SAFE, tokenId: SONG_ID + 1n } }],
+    [{ args: { from: ZERO_ADDRESS, to: TREASURY, tokenId: SONG_ID } }],
+    [{ args: { from: ZERO_ADDRESS, to: SAFE, tokenId: SONG_ID } }, { args: { from: ZERO_ADDRESS, to: SAFE, tokenId: SONG_ID } }],
+  ];
+  for (const transferHistory of cases) {
+    const { options, simulations } = fixture({ transferHistory });
+    await assert.rejects(buildSettlementPlan(options), hasCode('TRANSFER_HISTORY_UNAVAILABLE'));
+    assert.equal(simulations.length, 0);
+  }
+  const { options, simulations } = fixture();
+  options.mainnetClient.getLogs = async () => { throw new Error('RPC cannot serve historical range'); };
+  await assert.rejects(buildSettlementPlan(options), /historical range/);
   assert.equal(simulations.length, 0);
 });
 

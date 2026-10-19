@@ -124,7 +124,7 @@ contract SongADayEditions is ERC1155, Ownable2Step, ReentrancyGuard {
         onlyEditionManager
     {
         if (_editions[songId].registered) revert EditionAlreadyRegistered(songId);
-        if (price == 0 || closesAt <= block.timestamp || bytes(metadataURI).length == 0) {
+        if (songId == 0 || price == 0 || closesAt <= block.timestamp || bytes(metadataURI).length == 0) {
             revert InvalidEditionConfiguration();
         }
         _editions[songId] = Edition({
@@ -184,7 +184,7 @@ contract SongADayEditions is ERC1155, Ownable2Step, ReentrancyGuard {
         if (supporter == address(0)) return false;
         SupporterCheckpoint[] storage checkpoints = _supporterHistory[supporter];
         // Upper-bound search for the last checkpoint at or before the publication snapshot.
-        uint256 low;
+        uint256 low = 0;
         uint256 high = checkpoints.length;
         while (low < high) {
             uint256 mid = low + (high - low) / 2;

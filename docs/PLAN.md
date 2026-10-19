@@ -2,12 +2,12 @@
 
 - [x] Inspect actual Toolkit creation, funds claim, and mainnet mint/delivery flow.
 - [x] Establish isolated MIT-licensed public-ready contract repository.
-- [ ] Build Base no-reserve auction with frozen terms, recipient snapshot, refunds and proceeds.
-- [ ] Build mainnet soulbound editions with paid mint and programmatic supporter snapshots.
-- [ ] Add dry-run-first Toolkit settlement adapter and integration tests.
-- [ ] Record baseline unit, fuzz, invariant, compiler and static-analysis results.
-- [ ] Run independent adversarial review round with distinct attack surfaces.
-- [ ] Reproduce candidates, fix confirmed defects, add regressions.
+- [x] Build Base no-reserve auction with frozen terms, recipient snapshot, refunds and proceeds.
+- [x] Build mainnet soulbound editions with paid mint and programmatic supporter snapshots.
+- [x] Add dry-run-first Toolkit settlement adapter and integration tests.
+- [x] Record baseline unit, fuzz, invariant, compiler and static-analysis results.
+- [x] Run independent adversarial review round with distinct attack surfaces.
+- [x] Reproduce candidates, harden the delivery-replay limitation, add regressions.
 - [ ] Repeat with fresh agents until a complete fresh round finds no confirmed security defect.
 - [ ] Publish reviewed source, ABI artifacts, round ledger and operator handoff.
 

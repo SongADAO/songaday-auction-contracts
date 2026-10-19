@@ -38,7 +38,7 @@ Placeholder addresses must be replaced. The command accepts HTTP(S) RPC URLs, re
 
 The API can also be imported from `integration/settlement-plan.mjs` as `buildSettlementPlan({ baseClient, mainnetClient, auctionAddress, songId, caller, adminHolders })`. Inject ordinary viem public clients or mock clients. `songId` is a decimal string or bigint, preserving full uint256 precision.
 
-The planner verifies actual RPC chain IDs (Base 8453 and Ethereum 1), the auction contract's immutable original collection/chain, and a finalized block on each chain. Reads are pinned to those block numbers. A node that cannot serve finalized snapshots or historical reads fails rather than silently weakening that requirement. Plans include block numbers and hashes for review.
+The planner verifies actual RPC chain IDs (Base 8453 and Ethereum 1), the auction contract's immutable original collection/chain, and a finalized block on each chain. Reads are pinned to those block numbers. A node that cannot serve finalized snapshots or historical reads fails rather than silently weakening that requirement. Preparing transfers also requires a complete token-filtered `Transfer` log query from block zero through the mainnet snapshot. RPC range errors fail closed; use a provider that can serve that history. Plans include block numbers and hashes for review.
 
 Only a settled, noncancelled auction with a positive winning bid and nonzero mainnet recipient permits a mainnet plan. Read the finalized Base contract directly; an indexer can find song IDs, but cannot authorize delivery. An auction with no bids has no original to distribute through this workflow.
 
@@ -47,9 +47,9 @@ Only a settled, noncancelled auction with a positive winning bid and nonzero mai
 | `mint-required` | One `dailyMint(songNumber, bareCID)` call | Execute only the mint, confirm successful receipt and mainnet finality, then rerun the planner |
 | `transfer-ready` | One `safeTransferFrom(actualOwner, recipient, songNumber)` call | Review, simulate against current state, propose and execute from the configured caller |
 | `already-delivered` | None | Recipient currently owns the original |
-| `manual-review` | None | Original belongs to an address outside the explicit admin-holder allowlist; inspect history rather than reclaiming it |
+| `manual-review` | None | Original belongs outside the admin-holder allowlist, or has already moved after minting; inspect history rather than reclaiming it |
 
-Mint preparation requires the configured caller to be the existing original contract's owner. Missing tokens are recognized only through supported structured/encoded ERC721 nonexistent-token revert data. RPC timeouts, empty reverts, and arbitrary error text do not trigger minting. Existing originals require both an allowed current holder and actual caller ownership, token approval, or operator approval. A stale approval from a later collector never authorizes reclaiming their original.
+Mint preparation requires the configured caller to be the existing original contract's owner. Missing tokens are recognized only through supported structured/encoded ERC721 nonexistent-token revert data. RPC timeouts, empty reverts, and arbitrary error text do not trigger minting. Existing originals require both an allowed current holder and actual caller ownership, token approval, or operator approval. A stale approval from a later collector never authorizes reclaiming their original. Before preparing a transfer, the planner requires exactly one mint event to the actual owner and no later transfer. This deliberately conservative guard prevents an old auction being replayed when a winner later sells the NFT back to an admin. Even a legitimate admin-to-admin move requires manual review; the planner has no bypass flag. An empty or malformed history cannot authorize transfer. A trustworthy RPC is still required; this is not an independent cryptographic proof of complete logs.
 
 Both mint and transfer are simulated from the configured caller at the recorded mainnet snapshot. A plan is a snapshot, not an authorization to execute stale data. Rebuild and simulate immediately before proposing, and again before executing a delayed Safe proposal. The existing original ERC721 does not enforce the local admin-holder policy itself, so the execution workflow must retain that check. A proposed Safe transaction is pending until an executed transaction has a successful receipt and finality. Output always starts with `executionStatus: "not-submitted"`.
 
@@ -81,3 +81,11 @@ node --test integration/*.test.mjs
 ```
 
 The injected-client tests cover chain and deployment checks, finalized state, missing or sold/cancelled auction states, RPC failure versus absent tokens, the two-pass treasury mint path, actual transfer authority, later-owner protection, recipient separation, metadata validation, and failed simulations. They do not claim a live Base deployment, mainnet mint, Safe execution, or Endaoment integration has occurred.
+
+Optional original-contract fork tests exercise the actual deployed mainnet code at block 26,222,849, including the normal mint/transfer path, the treasury branch, and the exact missing-token revert. All minting, owner impersonation and writes remain local to the fork:
+
+```sh
+MAINNET_FORK_RPC_URL=https://your-archive-rpc.example forge test --match-path 'test/fork/*' -vv
+```
+
+These three tests skip when `MAINNET_FORK_RPC_URL` is unset. This validates the unchanged original's interface and mint behavior, not a live new deployment or an external audit of that original.

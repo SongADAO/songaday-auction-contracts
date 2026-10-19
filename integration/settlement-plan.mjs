@@ -1,8 +1,9 @@
-import { decodeErrorResult, encodeFunctionData, getAddress, parseAbi } from 'viem';
+import { decodeErrorResult, encodeFunctionData, getAddress, parseAbi, parseAbiItem } from 'viem';
 
 export const ORIGINAL_COLLECTION = '0x19b703f65aA7E1E775BD06c2aa0D0d08c80f1C45';
 export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 const UINT256_MAX = (1n << 256n) - 1n;
+export const ORIGINAL_TRANSFER_EVENT = parseAbiItem('event Transfer(address indexed from,address indexed to,uint256 indexed tokenId)');
 
 export const AUCTION_ABI = parseAbi([
   'function originalCollection() view returns (address)',
@@ -281,6 +282,27 @@ export async function buildSettlementPlan({ baseClient, mainnetClient, auctionAd
   if (sameAddress(tokenOwner, recipient)) return { ...plan, status: 'already-delivered' };
   if (!allowed.has(tokenOwner.toLowerCase())) {
     return { ...plan, status: 'manual-review', notes: [...plan.notes, 'The original is held outside the explicit admin-holder allowlist. No transfer is prepared, even if the caller has an old approval.'] };
+  }
+  // Present ownership is not a delivery journal: a winner may later sell the NFT back to an admin.
+  // Require complete original-contract transfer history before preparing any retryable transfer.
+  // RPC range/history failures propagate; never silently substitute an empty history.
+  const history = await mainnetClient.getLogs({
+    address: ORIGINAL_COLLECTION, event: ORIGINAL_TRANSFER_EVENT, args: { tokenId: songId },
+    fromBlock: 0n, toBlock: mainnetBlock.number, strict: true,
+  });
+  if (!Array.isArray(history) || history.length === 0) {
+    refuse('TRANSFER_HISTORY_UNAVAILABLE', 'Cannot verify the original mint and transfer history. No transfer is prepared.');
+  }
+  for (const log of history) {
+    if (log.args?.tokenId !== songId || typeof log.args?.from !== 'string' || typeof log.args?.to !== 'string') {
+      refuse('TRANSFER_HISTORY_UNAVAILABLE', 'Original transfer history is incomplete or malformed.');
+    }
+    if (!sameAddress(log.args.from, ZERO_ADDRESS)) {
+      return { ...plan, status: 'manual-review', notes: [...plan.notes, 'The original has already moved after minting. Inspect its delivery history; an admin may have reacquired a previously delivered original. No repeat transfer is prepared.'] };
+    }
+  }
+  if (history.length !== 1 || !sameAddress(address(history[0].args.to, 'Mint recipient'), tokenOwner)) {
+    refuse('TRANSFER_HISTORY_UNAVAILABLE', 'Original mint history does not match its current owner.');
   }
   if (!sameAddress(tokenOwner, mainnetCaller)) {
     const [approved, operatorApproved] = await Promise.all([

@@ -86,6 +86,8 @@ contract SongADayEditionsTest is Test {
 
     function testRegistrationRequiresPositivePriceFutureCloseAndURI() public {
         vm.expectRevert(SongADayEditions.InvalidEditionConfiguration.selector);
+        editions.registerEdition(0, PRICE, block.timestamp + 1 days, "ipfs://metadata");
+        vm.expectRevert(SongADayEditions.InvalidEditionConfiguration.selector);
         editions.registerEdition(SONG, 0, block.timestamp + 1 days, "ipfs://metadata");
         vm.expectRevert(SongADayEditions.InvalidEditionConfiguration.selector);
         editions.registerEdition(SONG, PRICE, block.timestamp, "ipfs://metadata");

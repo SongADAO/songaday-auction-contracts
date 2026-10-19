@@ -300,7 +300,9 @@ contract AuctionHandler is Test {
     function bid(uint8 actorSeed, uint8 songSeed, uint96 extra) external {
         uint256 song = uint256(songSeed) % 3 + 1;
         SongADayAuction.Auction memory a = auction.getAuction(song);
-        if (a.settled || a.cancelled || block.timestamp < a.startTime || block.timestamp >= a.endTime) return;
+        if (a.settled || a.cancelled || block.timestamp < a.startTime || block.timestamp >= a.endTime) {
+            return;
+        }
         address actor = actors[uint256(actorSeed) % 3];
         uint256 amount = auction.minimumBid(song) + uint256(extra) % 10 ether;
         vm.deal(actor, amount);
@@ -316,7 +318,7 @@ contract AuctionHandler is Test {
     }
 
     function advance(uint32 secondsForward) external {
-        vm.warp(block.timestamp + uint256(secondsForward) % 2 days);
+        vm.warp(block.timestamp + uint256(secondsForward) % 900);
     }
 
     function settle(uint8 seed) external {
@@ -337,7 +339,7 @@ contract AuctionInvariantTest is StdInvariant, Test {
         auction = new SongADayAuction(address(this), address(0x721), address(0x777));
         for (uint256 i = 1; i <= 3; ++i) {
             auction.createAuction(
-                i, uint64(block.timestamp), uint64(block.timestamp + 1 days), 100, 900, "ipfs://original"
+                i, uint64(block.timestamp), uint64(block.timestamp + 1 hours), 100, 300, "ipfs://original"
             );
         }
         handler = new AuctionHandler(auction);
