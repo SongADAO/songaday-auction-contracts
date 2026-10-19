@@ -18,7 +18,7 @@ Jonathan authorized infrastructure setup and testing after deploying both contra
 - [x] Recheck song 6501 eligibility and enable only the local Toolkit creation boundary at 6501. The normal auction URL renders the new form; 6500 retains legacy handling and legacy submission rejects 6501.
 - [x] Jonathan runs the normal upload workflow to prepare 6501 metadata, then chooses its closing time and signs auction/edition creation. Both canonical owner transactions and exact metadata are verified; both initially close 2026-10-20 at 22:44 UTC (6:44 PM EDT).
 - [x] Enable and verify the public website at song 6501. Cloudflare version `5f099274-71a0-4d82-9a74-f51f40bca020` serves the new auction and edition flow on songaday.world; real chain data, exact deployed UI assets, desktop/mobile purchase entry and wallet dialogs were verified.
-- [ ] Jonathan signs a real collector edition purchase; verify the receipt and ownership. The website purchase helper simulation and synthetic-wallet lifecycle already pass.
+- [x] Real collector purchase confirmed and finalized: [purchase receipt](https://etherscan.io/tx/0x8baf9d8cb3814bf305623dd254d06f8972fb4324b930069ae5e546093337cc7c), exact 416158648393860 wei paid, mint events verified, recipient balance 1 and minted flag true. The actual website helper recognizes ownership and blocks a second purchase. Evidence is in `deployments/song-6501-2026-10-19.json`.
 
 ## Dedicated deadline wallet
 

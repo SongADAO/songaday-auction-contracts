@@ -169,5 +169,33 @@
     "indexLagBlocks": "9",
     "hasIndexingErrors": false,
     "auctionFieldMismatches": []
+  },
+  "collectorPurchase": {
+    "checkedAt": "2026-10-19T22:35:50.891Z",
+    "transactionHash": "0x8baf9d8cb3814bf305623dd254d06f8972fb4324b930069ae5e546093337cc7c",
+    "chainId": 1,
+    "contract": "0x3e290d6f5C66b1FAABd072Db9E0d223EDEfC7ab5",
+    "songId": "6501",
+    "status": "success",
+    "blockNumber": "26229499",
+    "blockHash": "0x15ef49a29d283e1b44c87a97ef0ac10e2450a4c60ea1691b10519354a2b4e5cb",
+    "blockTime": "2026-10-19T22:06:23.000Z",
+    "canonical": true,
+    "confirmations": "147",
+    "finalized": true,
+    "finalizedBlock": "26229573",
+    "functionName": "mintPaid",
+    "valueWei": "416158648393860",
+    "gasUsed": "103167",
+    "effectiveGasPrice": "211204700",
+    "gasPaidWei": "21789355284900",
+    "recipientEditionBalance": "1",
+    "hasMinted": true,
+    "totalSupply": "1",
+    "paidMintEventVerified": true,
+    "mintTransferVerified": true,
+    "websiteHasMinted": true,
+    "websiteDuplicatePurchaseBlocked": true,
+    "websiteCheckedAt": "2026-10-19T22:34:54.662Z"
   }
 }
