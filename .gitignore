@@ -1,0 +1,16 @@
+.env
+.env.*
+!.env.example
+.dev.vars
+*.pem
+*.key
+out/
+cache/
+broadcast/
+node_modules/
+.venv/
+private-assets/
+data/
+output/
+logs/
+.DS_Store
