@@ -24,6 +24,7 @@ Earlier GBM auctions and outstanding claims remain reachable. The Toolkit checks
 | Website history index | Schema/code generation and WASM build |
 | Website browser | Synthetic wallet performed a bid, refund withdrawal, mainnet switch and paid mint; duplicate UI checked; desktop/mobile inspection, no browser errors |
 | Toolkit | 51 focused tests; expanded focused TypeScript check including legacy cutover integration; disabled API/route checks and enabled local-chain browser preview |
+| Toolkit browser transactions | Actual UI updated supporter eligibility, created an auction, published its edition and delivered a supporter edition; four successful local receipts, exact deadline/price checks and zero page errors. Synthetic metadata and quote fixtures; no live Safe or uploads |
 | Application review | Fresh independent review verified transaction replacement handling, chain/Safe identity checks, metadata write boundary, cutover guard and all 10,000 allowed hundredth-percent bid increments |
 
 The Toolkit's pre-existing full-project typecheck exhausted the default Node heap; the focused integration check passed with an increased heap. The website's unchanged dependency lockfile has existing advisories, including critical advisories; those require a separate upgrade pass before production cutover. These are not claims that the entire existing applications are free of defects.
@@ -39,3 +40,11 @@ The Toolkit's pre-existing full-project typecheck exhausted the default Node hea
 - Rehearse the actual operator wallet/Safe, price quote and metadata upload in the intended environment before choosing the first production auction. Existing local simulations cannot prove production provider credentials or a real Safe workflow.
 
 The deadline signer, RPC sources and operator delivery remain trusted. The design does not provide a trustless bridge. Cancellation requires manual review; expired supporter entitlements remain valid only for editions whose publication snapshots already included that supporter. See [review ledger](REVIEW.md), [deployment decisions](DEPLOYMENT.md), and [relay operations](../relay/README.md).
+
+## Saved implementation revisions
+
+- Reviewed contracts/planners/relay source: `08800637a08a832d121e9fbd7b62117fabd80e3e`; fingerprint commit `2a90c1300a5140c3b57b679f171ea9497e789e57`. The [clean GitHub CI run](https://github.com/SongADAO/songaday-auction-contracts/actions/runs/39303560669) passed tests, two-chain rehearsal and ABI consistency on that revision. Later handoff documentation does not alter reviewed production source.
+- Website: `805875f0` on `codex/auction-editions-integration`, based on the current Cloudflare implementation. Committed locally; no production deployment or cutover.
+- Toolkit: `c3b2fa198676e763e9012c09ba014ab79b96daa7`. Only this task's integration files and precise cutover guard hunks were committed; unrelated pre-existing working changes remain intact. Committed locally; not pushed or deployed.
+
+The website integration is in the isolated `songaday.world-auction-editions` worktree. The Toolkit documentation is `docs/songaday-auctions/INTEGRATION.md`; the website documentation is `docs/CONVENTIONAL-AUCTIONS.md`. Local test servers and disposable chains have been stopped.

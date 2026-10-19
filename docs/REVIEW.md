@@ -103,6 +103,8 @@ wrangler deploy --config relay/wrangler.jsonc --dry-run
 - Latest mainnet history closes the discovered stale-finality replay window; it is not a transaction lock. Rebuild before executing an unsigned original-delivery call or delayed Safe proposal. Mainnet mint/delivery and cross-chain recipient control remain trusted operator responsibilities.
 - Automatic donor ingestion and daily supporter delivery scheduling are pending Endaoment integration. The manual registry, historical entitlements and bounded batch minting are implemented; no donor records or credentials are supplied.
 
+Application integration review also found and fixed cancelled/replaced transactions being reported as successful and manual legacy creation bypassing the cutover. Follow-up review fixed exact decimal percentage parsing and the explorer hash after transaction repricing. A fresh application review reported no remaining concrete security finding or functional blocker, and the complete four-transaction Toolkit browser rehearsal subsequently passed.
+
 Website and Toolkit review/validation are recorded in their integration documentation and the [cross-repository handoff](INTEGRATION.md). Contract deployment, live Safe execution, provider production credentials, live indexer/relay operations and production cutover remain unperformed.
 
 ## Known design and operational assumptions
