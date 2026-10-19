@@ -35,19 +35,6 @@
   },
   {
     "type": "function",
-    "name": "MAX_DURATION",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
     "name": "MAX_EXTENSION",
     "inputs": [],
     "outputs": [

@@ -12,7 +12,7 @@ Constructor arguments:
 new SongADayEditions(initialOwner, originalCollection, paymentToken)
 ```
 
-Use zero for `paymentToken` to accept ETH. Otherwise it must be a deployed ERC20 contract; mainnet USDC is one possible deployment choice. This asset choice cannot change after deployment. The owner should be a deliberately selected operational wallet or multisig. Ownership transfers require acceptance by the pending owner; ownership cannot be renounced.
+The selected launch configuration uses zero for `paymentToken` to accept ETH, with buyers paying mainnet gas. The contract also supports a deployed ERC20 selected at deployment, but that option is not the selected Song A Day configuration. The asset choice cannot change after deployment. The owner should be a deliberately selected operational wallet or multisig. Ownership transfers require acceptance by the pending owner; ownership cannot be renounced.
 
 An owner or an authorized edition manager calls:
 
@@ -20,13 +20,31 @@ An owner or an authorized edition manager calls:
 registerEdition(songId, price, closesAt, metadataURI)
 ```
 
-Publication opens purchases immediately at the transaction's `block.timestamp` and snapshots the current supporter revision. Price must be positive, the close timestamp must be in the future, and metadata URI must be nonempty. All fields are immutable after publication, including the metadata URI. A song cannot be registered twice. Choose stable content-addressed metadata if the content itself must also be immutable.
+Publication opens purchases immediately at the transaction's `block.timestamp` and snapshots the current supporter revision. Price must be positive, the close timestamp must be in the future, and metadata URI must be nonempty. Price, opening timestamp, supporter snapshot, and metadata URI are immutable after publication. The closing timestamp can only increase through the separate deadline role described below, until permanent finalization. A song cannot be registered twice. Choose stable content-addressed metadata if the content itself must also be immutable.
 
 The contract accepts raw payment units, not a USD oracle feed. For a USDC deployment with six decimals, `price = 1_000_000` charges one USDC. For an ETH deployment, the publishing process supplies a wei quote approximating one dollar; that quote stays fixed until the window closes. An ETH quote can move away from one dollar as the market changes. Buyers also pay mainnet gas unless another service sponsors it.
 
 `mintPaid(songId)` buys for the caller only. An ETH buyer sends exactly the published price. An ERC20 buyer approves this contract and calls without ETH; `SafeERC20` verifies transfer success and the contract checks its balance increased by exactly the price. Fee-on-transfer payments are rejected atomically. Payment, supply changes, and receiver acceptance all roll back if any step fails. Purchases close when `block.timestamp >= closesAt`.
 
 There is no owner gift mint, no bidder award, no edition transfer, no approval, and no burn. A purchase and a supporter entitlement share the same permanent `hasMinted(songId, recipient)` record. A supporter who bought before automatic distribution is skipped during distribution.
+
+## Following the Base auction deadline
+
+The edition sale is intended to end at the corresponding Base auction's actual closing timestamp, including bidding extensions. Base and mainnet cannot synchronously read each other's contracts. A trusted off-chain relay observes Base and submits mainnet transactions:
+
+```solidity
+setDeadlineManager(relay, enabled) // owner only
+extendEditionDeadline(songId, newClosesAt)
+finalizeEditionSale(songId)
+```
+
+The owner and separately authorized deadline managers may extend or finalize. Edition managers and supporter managers have neither power unless separately granted. A deadline manager cannot publish songs, change prices or metadata, edit supporter eligibility, withdraw revenue, or grant other managers. The owner can revoke the role immediately. Like other explicit manager grants, deadline roles persist through ownership transfer until revoked.
+
+An extension must be strictly later than both the stored closing timestamp and the mainnet transaction's timestamp. It never shortens a sale. If the relay arrives after the previous deadline but before the new deadline, it reopens purchases for the remaining time. A buyer can temporarily see purchases closed while a Base extension is awaiting mainnet confirmation; a failed purchase reverts its payment, although the buyer still pays gas. Relay reliability, mainnet inclusion, Base data integrity, and the relay's honesty are operational trust assumptions. The contract cannot prove that a supplied deadline matches a Base auction. A compromised authorized relay can extend an unfinalized sale arbitrarily far or prematurely finalize a stale, already-passed deadline; it cannot take funds or shorten a still-open stored deadline.
+
+Once the operator verifies that the Base auction has permanently ended, `finalizeEditionSale` locks all future extensions. It only succeeds at or after the currently stored mainnet deadline, and even the owner cannot undo it. Finalization is restricted because a public caller could otherwise lock a stale deadline before a legitimate Base extension arrives. The relay must use confirmed Base state and recheck immediately before submitting finalization. It must not finalize merely because the mainnet deadline passed. Finalization only locks the public sale: historical supporter entitlements remain deliverable.
+
+If the relay misses the complete extension and the actual Base end is already past, it must not manufacture extra sale time. The sale remains closed and can be finalized; record the actual Base end in off-chain history because the stale mainnet `closesAt` cannot be advanced to a timestamp already in the past. There is no automatic early-close path for cancelled Base auctions. Cancellation requires manual review and leaves the last relayed sale deadline in effect; any different cancellation policy requires an explicit product decision.
 
 ## Supporter updates and historical entitlement
 

@@ -37,6 +37,7 @@ function fixture(overrides = {}) {
     base: { number: 900n, hash: `0x${'ab'.repeat(32)}`, timestamp: 3_000n },
     mainnet: { number: 800n, hash: `0x${'cd'.repeat(32)}`, timestamp: 2_500n },
   };
+  blocks.mainnetFinalized = { ...blocks.mainnet };
   const options = {
     auctionAddress: AUCTION, songId: String(SONG_ID), caller: SAFE, adminHolders: [SAFE, TREASURY],
     baseClient: {
@@ -54,7 +55,10 @@ function fixture(overrides = {}) {
     },
     mainnetClient: {
       chain: { id: 1 }, getChainId: async () => 1,
-      getBlock: async (request) => { assert.equal(request.blockTag, 'finalized'); return blocks.mainnet; },
+      getBlock: async (request) => {
+        assert.ok(['latest', 'finalized'].includes(request.blockTag));
+        return { ...(request.blockTag === 'latest' ? blocks.mainnet : blocks.mainnetFinalized) };
+      },
       getLogs: async (request) => {
         assert.equal(request.address, ORIGINAL_COLLECTION);
         assert.equal(request.fromBlock, 0n);
@@ -247,6 +251,42 @@ test('a completed original delivery cannot be replayed when the winner sells bac
   assert.equal(replay.status, 'manual-review');
   assert.deepEqual(replay.calls, []);
   assert.match(replay.notes.at(-1), /reacquired/);
+});
+
+test('delivery and admin reacquisition after the finalized block cannot authorize replay', async () => {
+  const { options, blocks } = fixture();
+  blocks.mainnet.number = 865n;
+  blocks.mainnetFinalized.number = 800n;
+  options.mainnetClient.readContract = async ({ functionName }) => {
+    if (functionName === 'ownerOf') return SAFE;
+    throw new Error(`Unexpected read ${functionName}`);
+  };
+  options.mainnetClient.simulateContract = async () => ({ result: undefined });
+  let through;
+  options.mainnetClient.getLogs = async ({ toBlock }) => {
+    through = toBlock;
+    const mint = { args: { tokenId: SONG_ID, from: ZERO_ADDRESS, to: SAFE } };
+    return toBlock <= 800n ? [mint] : [mint,
+      { args: { tokenId: SONG_ID, from: SAFE, to: RECIPIENT } },
+      { args: { tokenId: SONG_ID, from: RECIPIENT, to: SAFE } },
+    ];
+  };
+  const plan = await buildSettlementPlan(options);
+  assert.equal(plan.status, 'manual-review');
+  assert.equal(plan.calls.length, 0);
+  assert.equal(through, 865n);
+  assert.equal(plan.snapshots.mainnetFinalized.number, '800');
+});
+
+test('mainnet advancing or reorganizing during simulation requires a fresh plan', async () => {
+  for (const field of ['number', 'hash']) {
+    const { options, blocks } = fixture();
+    options.mainnetClient.simulateContract = async () => {
+      if (field === 'number') blocks.mainnet.number += 1n;
+      else blocks.mainnet.hash = `0x${'ef'.repeat(32)}`;
+    };
+    await assert.rejects(buildSettlementPlan(options), hasCode('MAINNET_STATE_CHANGED'));
+  }
 });
 
 test('missing, malformed, mismatching or unavailable transfer history never authorizes transfer', async () => {

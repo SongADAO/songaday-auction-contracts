@@ -1,0 +1,15 @@
+# Edition deadline relay
+
+This Cloudflare scheduled Worker is implemented but **disabled and not deployed**. It discovers recent/active song IDs from the new Base Goldsky index, then reads each auction and edition directly from their configured contracts. Index data cannot supply transaction destinations or calldata. The production deployment identities must be verified before configuration.
+
+Every minute, the worker can extend an edition to the actual observed Base closing time. It uses two Base block confirmations for prompt extension delivery. This is not Ethereum finality: a deeper Base reorg can leave mainnet with an excessively late deadline. Mainnet cannot independently prove the source auction; the dedicated deadline manager is an explicitly trusted role. A delayed update may temporarily close sales; a late update never fabricates extra sale time. Permanent sale finalization requires finalized Base state past the auction end. Cancellations are manual review and retain the last known edition deadline.
+
+The signer must be a separate funded wallet with **only** the deadline-manager role. The runner refuses the edition owner key. It cannot publish editions, manage donors, mint to arbitrary recipients, or withdraw funds. Do not grant the automation account those roles elsewhere. Every send builds a fresh plan and waits for a successful receipt. Failures are reported with sanitized codes; retries rebuild rather than reusing old calldata.
+
+`wrangler.jsonc` defaults both enablement and execution to false. Configure the public deployment addresses, Goldsky URL and relay address only after review. Put RPC credentials and `DEADLINE_RELAY_PRIVATE_KEY` in Worker secrets, never source, command-line arguments, or browser configuration. `relay/.dev.vars.example` lists variable names only. Start enabled with execution false, inspect dry-run classifications, then separately authorize execution. This repository has not supplied or used a live signing key.
+
+Goldsky discovery covers auctions ending within the last seven days and future auctions, up to 1,000 records. Older missed finalizations need the Toolkit's reconciliation view. An outage can delay extensions; monitoring should alert on failed invocations, manual-review records, low balance, and stale indexing. Scheduled invocations can overlap and a receipt timeout can lead to a duplicate reverting attempt; monotonic extension and permanent-finalization checks keep that from changing sale rules, but it can waste gas. Keep the dedicated wallet's funded balance within the intended spending budget. Cheap repeated Base bids can produce repeated mainnet synchronization costs under the intentionally unbounded extension policy.
+
+## Verification
+
+`npm run test:integration` tests fail-closed discovery, role isolation and deadline planning. `npm run test:local-chains` starts two private localhost Anvil chains, executes real auction/edition transactions and the relay runner with unlocked synthetic accounts, then stops them. It does not read RPC environment variables, keys or production wallets. Mainnet original delivery is covered separately by the original-contract fork tests.

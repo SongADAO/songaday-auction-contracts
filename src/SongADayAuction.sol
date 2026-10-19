@@ -14,7 +14,6 @@ import {SafeCast} from "@openzeppelin/contracts/utils/math/SafeCast.sol";
 contract SongADayAuction is Ownable2Step, ReentrancyGuard, Pausable {
     uint256 public constant originalChainId = 1;
     uint256 public constant MAX_BATCH = 100;
-    uint256 public constant MAX_DURATION = 30 days;
     uint256 public constant MAX_EXTENSION = 1 hours;
     address public immutable originalCollection;
     address public beneficiary;
@@ -117,6 +116,7 @@ contract SongADayAuction is Ownable2Step, ReentrancyGuard, Pausable {
         _unpause();
     }
 
+    /// @param startTime Zero opens at the mined block's timestamp, allowing time to sign a transaction.
     function createAuction(
         uint256 songId,
         uint64 startTime,
@@ -126,11 +126,11 @@ contract SongADayAuction is Ownable2Step, ReentrancyGuard, Pausable {
         string calldata metadataURI
     ) external onlyManager whenNotPaused {
         if (_auctions[songId].startTime != 0) revert AuctionAlreadyExists();
+        if (startTime == 0) startTime = SafeCast.toUint64(block.timestamp);
         if (
             songId == 0 || startTime == 0 || startTime < block.timestamp || endTime <= startTime
-                || endTime - startTime > MAX_DURATION || incrementBps == 0 || incrementBps > 10_000
-                || extensionWindow > MAX_EXTENSION || extensionWindow > endTime - startTime
-                || bytes(metadataURI).length == 0
+                || incrementBps == 0 || incrementBps > 10_000 || extensionWindow > MAX_EXTENSION
+                || extensionWindow > endTime - startTime || bytes(metadataURI).length == 0
         ) revert InvalidTerms();
         _auctions[songId] = Auction({
             startTime: startTime,

@@ -1,0 +1,7 @@
+{
+  "name": "songaday-edition-deadlines",
+  "main": "worker.mjs",
+  "compatibility_date": "2026-10-19",
+  "triggers": { "crons": ["* * * * *"] },
+  "vars": { "DEADLINE_RELAY_ENABLED": "false", "DEADLINE_RELAY_EXECUTE": "false" }
+}

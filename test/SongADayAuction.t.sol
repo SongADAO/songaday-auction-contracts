@@ -273,6 +273,50 @@ contract SongADayAuctionTest is Test {
         auction.settleMany(new uint256[](101));
     }
 
+    function testImmediateStartUsesMinedTimestampAfterSigningDelay() public {
+        uint64 requestedEnd = uint64(block.timestamp + 2 days);
+        vm.warp(block.timestamp + 10 minutes);
+        auction.createAuction(6501, 0, requestedEnd, 100, 900, URI);
+        SongADayAuction.Auction memory created = auction.getAuction(6501);
+        assertEq(created.startTime, block.timestamp);
+        assertEq(created.endTime, requestedEnd);
+        vm.prank(alice);
+        auction.bid{value: 1}(6501, 0, alice);
+        assertEq(auction.getAuction(6501).highestBid, 1);
+    }
+
+    function testCustomEndCanExceedThirtyDays() public {
+        uint64 requestedEnd = uint64(block.timestamp + 365 days);
+        auction.createAuction(6501, 0, requestedEnd, 100, 900, URI);
+        assertEq(auction.getAuction(6501).endTime, requestedEnd);
+    }
+
+    function testImmediateStartRejectsExpiredEndAndInsufficientExtensionDuration() public {
+        uint64 requestedEnd = uint64(block.timestamp + 1 days);
+        vm.warp(requestedEnd);
+        vm.expectRevert(SongADayAuction.InvalidTerms.selector);
+        auction.createAuction(6501, 0, requestedEnd, 100, 900, URI);
+        vm.warp(requestedEnd + 1);
+        vm.expectRevert(SongADayAuction.InvalidTerms.selector);
+        auction.createAuction(6501, 0, requestedEnd, 100, 900, URI);
+        vm.expectRevert(SongADayAuction.InvalidTerms.selector);
+        auction.createAuction(6501, 0, uint64(block.timestamp + 899), 100, 900, URI);
+        auction.createAuction(6501, 0, uint64(block.timestamp + 900), 100, 900, URI);
+        assertEq(auction.getAuction(6501).startTime, block.timestamp);
+    }
+
+    function testFuzzImmediateStartKeepsChosenEnd(uint32 durationSeed, uint32 signingDelaySeed) public {
+        uint256 duration = bound(uint256(durationSeed), 901, 3650 days);
+        uint256 signingDelay = bound(uint256(signingDelaySeed), 0, duration - 900);
+        uint64 requestedEnd = uint64(block.timestamp + duration);
+        vm.warp(block.timestamp + signingDelay);
+        auction.createAuction(6501, 0, requestedEnd, 100, 900, URI);
+        SongADayAuction.Auction memory created = auction.getAuction(6501);
+        assertEq(created.startTime, block.timestamp);
+        assertEq(created.endTime, requestedEnd);
+        assertGe(created.endTime - created.startTime, created.extensionWindow);
+    }
+
     function testFuzzRoundingNeverAllowsEqualBid(uint96 raw, uint16 bps) public {
         uint256 amount = bound(uint256(raw), 1, 10 ether);
         uint16 increment = uint16(bound(uint256(bps), 1, 10_000));

@@ -39,6 +39,8 @@ contract SongADayEditions is ERC1155, Ownable2Step, ReentrancyGuard {
     mapping(address supporter => SupporterCheckpoint[]) private _supporterHistory;
     mapping(address manager => bool) public editionManagers;
     mapping(address manager => bool) public supporterManagers;
+    mapping(address manager => bool) public deadlineManagers;
+    mapping(uint256 songId => bool) public editionSaleFinalized;
     mapping(uint256 songId => mapping(address recipient => bool)) public hasMinted;
     mapping(uint256 songId => uint256) public totalSupply;
     uint256 public supporterRevision;
@@ -47,9 +49,13 @@ contract SongADayEditions is ERC1155, Ownable2Step, ReentrancyGuard {
     error InvalidContract(address account);
     error UnauthorizedEditionManager(address account);
     error UnauthorizedSupporterManager(address account);
+    error UnauthorizedDeadlineManager(address account);
     error UnknownEdition(uint256 songId);
     error EditionAlreadyRegistered(uint256 songId);
     error InvalidEditionConfiguration();
+    error InvalidEditionDeadline();
+    error EditionSaleAlreadyFinalized(uint256 songId);
+    error EditionSaleNotEnded(uint256 songId);
     error InvalidSupporterExpiry();
     error InvalidBatchLength();
     error PurchaseWindowClosed(uint256 songId);
@@ -72,6 +78,9 @@ contract SongADayEditions is ERC1155, Ownable2Step, ReentrancyGuard {
     );
     event EditionManagerUpdated(address indexed manager, bool enabled);
     event SupporterManagerUpdated(address indexed manager, bool enabled);
+    event DeadlineManagerUpdated(address indexed manager, bool enabled);
+    event EditionDeadlineExtended(uint256 indexed songId, uint256 previousClosesAt, uint256 newClosesAt);
+    event EditionSaleFinalized(uint256 indexed songId, uint256 closesAt);
     event SupporterUpdated(address indexed supporter, uint256 indexed revision, uint256 validUntil);
     event EditionMinted(uint256 indexed songId, address indexed recipient, bool supporter);
     event SupporterMintSkipped(uint256 indexed songId, address indexed recipient);
@@ -105,6 +114,13 @@ contract SongADayEditions is ERC1155, Ownable2Step, ReentrancyGuard {
         _;
     }
 
+    modifier onlyDeadlineManager() {
+        if (msg.sender != owner() && !deadlineManagers[msg.sender]) {
+            revert UnauthorizedDeadlineManager(msg.sender);
+        }
+        _;
+    }
+
     function setEditionManager(address manager, bool enabled) external onlyOwner {
         if (manager == address(0) || manager == address(this)) revert InvalidAddress();
         editionManagers[manager] = enabled;
@@ -117,7 +133,13 @@ contract SongADayEditions is ERC1155, Ownable2Step, ReentrancyGuard {
         emit SupporterManagerUpdated(manager, enabled);
     }
 
-    /// @notice Publishes one immutable song configuration. Registration opens purchases immediately.
+    function setDeadlineManager(address manager, bool enabled) external onlyOwner {
+        if (manager == address(0) || manager == address(this)) revert InvalidAddress();
+        deadlineManagers[manager] = enabled;
+        emit DeadlineManagerUpdated(manager, enabled);
+    }
+
+    /// @notice Publishes a song with fixed price, metadata and entitlement snapshot; purchases open immediately.
     /// @dev Prices are raw payment-token units (wei for ETH); USD quoting happens outside this contract.
     function registerEdition(uint256 songId, uint256 price, uint256 closesAt, string calldata metadataURI)
         external
@@ -137,6 +159,29 @@ contract SongADayEditions is ERC1155, Ownable2Step, ReentrancyGuard {
         });
         emit EditionRegistered(songId, price, block.timestamp, closesAt, supporterRevision, metadataURI);
         emit URI(metadataURI, songId);
+    }
+
+    /// @notice Relays a later Base auction deadline without changing any other publication terms.
+    /// @dev This role is trusted: the contract cannot verify Base. Delayed relays may reopen a closed window.
+    function extendEditionDeadline(uint256 songId, uint256 newClosesAt) external onlyDeadlineManager {
+        Edition storage song = _edition(songId);
+        if (editionSaleFinalized[songId]) revert EditionSaleAlreadyFinalized(songId);
+        uint256 previousClosesAt = song.closesAt;
+        if (newClosesAt <= previousClosesAt || newClosesAt <= block.timestamp) {
+            revert InvalidEditionDeadline();
+        }
+        song.closesAt = newClosesAt;
+        emit EditionDeadlineExtended(songId, previousClosesAt, newClosesAt);
+    }
+
+    /// @notice Permanently locks an ended sale after the operator has verified the final Base auction outcome.
+    /// @dev Role-gated because public finalization could lock a stale deadline before an extension is relayed.
+    function finalizeEditionSale(uint256 songId) external onlyDeadlineManager {
+        Edition storage song = _edition(songId);
+        if (editionSaleFinalized[songId]) revert EditionSaleAlreadyFinalized(songId);
+        if (block.timestamp < song.closesAt) revert EditionSaleNotEnded(songId);
+        editionSaleFinalized[songId] = true;
+        emit EditionSaleFinalized(songId, song.closesAt);
     }
 
     function edition(uint256 songId) external view returns (Edition memory) {

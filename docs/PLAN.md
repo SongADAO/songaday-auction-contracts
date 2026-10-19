@@ -13,6 +13,19 @@
 
 No deployment, privileged-key use, live auction replacement, or Endaoment connection is authorized in this implementation phase.
 
+## Auction-aligned editions and application integration
+
+- [x] Add restricted monotonic edition deadline updates and permanent sale finalization.
+- [x] Preserve Toolkit custom closing times and support immediate auction creation despite signing delays.
+- [x] Build and test the unsigned cross-chain deadline planner, including stale/reordered updates and outages.
+- [x] Run fresh independent security reviews of the changed contracts and planners; fix and repeat as needed.
+- [x] Wire feature-gated website bidding, refunds, mainnet edition purchases, and auction history.
+- [x] Wire Toolkit creation, separate edition metadata, settlement, and deadline reconciliation.
+- [x] Rehearse local chain transactions and browser flows; run relevant builds and regression checks.
+- [x] Record exact tested revisions, remaining production configuration, and operational limitations.
+
+Confirmed: editions use approximately $1 in ETH quoted at publication; buyers pay gas. Edition purchase windows follow the actual Base auction end, including extensions, through a trusted restricted relay. A relay delay may temporarily close purchases at the last known deadline. There are no initial donors. Keep existing GBM obligations reachable and the new path disabled until reviewed deployment addresses and the cutover song are configured.
+
 ## Product decisions to keep explicit
 
-Base holds ETH auction funds only; no custody of mainnet originals and no trustless bridge. Mainnet delivery remains an operator responsibility. No GBM incentives. Auction terms freeze at creation. First bid can be one wei. Edition price/payment choice will be configurable at deployment/publication pending Jonathan's reply; never imply an ETH amount is a guaranteed USD price. Donor list updates must not grant treasury control. No Endaoment status is assumed.
+Base holds ETH auction funds only; no custody of mainnet originals and no trustless bridge. Mainnet delivery remains an operator responsibility. No GBM incentives. Auction terms freeze at creation. First bid can be one wei. Production editions use native ETH, priced at approximately $1 when published; the frozen amount is not a guaranteed USD price. Donor list updates must not grant treasury control. No Endaoment status is assumed.

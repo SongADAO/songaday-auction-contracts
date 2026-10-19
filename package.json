@@ -9,6 +9,7 @@
     "test": "forge test && node --test integration/*.test.mjs",
     "test:contracts": "forge test",
     "test:integration": "node --test integration/*.test.mjs",
+    "test:local-chains": "forge build && node integration/local-chains.mjs",
     "build": "forge build",
     "format:check": "forge fmt --check",
     "export:abi": "node scripts/export-abi.mjs"

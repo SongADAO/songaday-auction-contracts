@@ -178,10 +178,10 @@ async function checkChain(client, expected, label) {
   }
 }
 
-async function finalizedBlock(client, label) {
-  const block = await client.getBlock({ blockTag: 'finalized' });
+async function snapshotBlock(client, label, blockTag = 'finalized') {
+  const block = await client.getBlock({ blockTag });
   if (typeof block.number !== 'bigint' || typeof block.timestamp !== 'bigint' || !/^0x[0-9a-fA-F]{64}$/.test(block.hash ?? '')) {
-    refuse('INVALID_BLOCK', `${label} RPC did not return a finalized numbered block.`);
+    refuse('INVALID_BLOCK', `${label} RPC did not return a numbered ${blockTag} block.`);
   }
   return block;
 }
@@ -199,7 +199,7 @@ function safeCall(functionName, args) {
 }
 
 /**
- * Build unsigned mainnet Safe calls from finalized chain state. No signer, key,
+ * Build unsigned mainnet Safe calls from finalized Base and current mainnet state. No signer, key,
  * wallet client, transaction execution, indexer, or external metadata fetch occurs.
  */
 export async function buildSettlementPlan({ baseClient, mainnetClient, auctionAddress, songId: inputSongId, caller, adminHolders }) {
@@ -211,9 +211,17 @@ export async function buildSettlementPlan({ baseClient, mainnetClient, auctionAd
   }
   const allowed = new Set(adminHolders.map((holder) => address(holder, 'Admin holder').toLowerCase()));
   await Promise.all([checkChain(baseClient, 8453, 'Base'), checkChain(mainnetClient, 1, 'Mainnet')]);
-  const [baseBlock, mainnetBlock] = await Promise.all([
-    finalizedBlock(baseClient, 'Base'), finalizedBlock(mainnetClient, 'Mainnet'),
+  const [baseBlock, mainnetBlock, mainnetFinalized] = await Promise.all([
+    snapshotBlock(baseClient, 'Base'), snapshotBlock(mainnetClient, 'Mainnet', 'latest'),
+    snapshotBlock(mainnetClient, 'Mainnet'),
   ]);
+  if (mainnetFinalized.number > mainnetBlock.number) refuse('INVALID_BLOCK', 'Mainnet finalized block is ahead of its head.');
+  const checkCurrentMainnet = async () => {
+    const current = await snapshotBlock(mainnetClient, 'Mainnet', 'latest');
+    if (current.number !== mainnetBlock.number || current.hash !== mainnetBlock.hash) {
+      refuse('MAINNET_STATE_CHANGED', 'Mainnet advanced or reorganized while planning. Rebuild before signing.');
+    }
+  };
   const readBase = (functionName, args = []) => baseClient.readContract({
     address: auctionContract, abi: AUCTION_ABI, functionName, args, blockNumber: baseBlock.number,
   });
@@ -244,7 +252,7 @@ export async function buildSettlementPlan({ baseClient, mainnetClient, auctionAd
     auction: { chainId: 8453, address: auctionContract, songId: String(songId), bidder, recipient, highestBid: String(auction.highestBid), metadataURI: auction.metadataURI },
     originalCollection: ORIGINAL_COLLECTION,
     caller: mainnetCaller,
-    snapshots: { base: blockSummary(baseBlock), mainnet: blockSummary(mainnetBlock) },
+    snapshots: { base: blockSummary(baseBlock), mainnet: blockSummary(mainnetBlock), mainnetFinalized: blockSummary(mainnetFinalized) },
     calls: [],
     requiresSecondPass: false,
     notes: ['Rebuild and simulate against current state before proposing or executing. A Safe proposal is not an executed transaction.'],
@@ -265,6 +273,7 @@ export async function buildSettlementPlan({ baseClient, mainnetClient, auctionAd
       address: ORIGINAL_COLLECTION, abi: ORIGINAL_ABI, functionName: 'dailyMint',
       args: [songId, metadataCid], account: mainnetCaller, blockNumber: mainnetBlock.number,
     });
+    await checkCurrentMainnet();
     return {
       ...plan,
       status: 'mint-required',
@@ -316,6 +325,7 @@ export async function buildSettlementPlan({ baseClient, mainnetClient, auctionAd
     address: ORIGINAL_COLLECTION, abi: ORIGINAL_ABI, functionName: 'safeTransferFrom',
     args: [tokenOwner, recipient, songId], account: mainnetCaller, blockNumber: mainnetBlock.number,
   });
+  await checkCurrentMainnet();
   return { ...plan, status: 'transfer-ready', calls: [safeCall('safeTransferFrom', [tokenOwner, recipient, songId])] };
 }
 
