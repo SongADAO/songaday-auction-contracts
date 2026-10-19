@@ -17,7 +17,8 @@ Jonathan authorized infrastructure setup and testing after deploying both contra
 - [x] Observe the enabled production schedule: at 21:47:09 UTC, version `8a4dde36-61fd-4cf7-a6f6-6e7193e60456` completed successfully with song 6501 `in-sync`, no transaction, and no exceptions.
 - [x] Recheck song 6501 eligibility and enable only the local Toolkit creation boundary at 6501. The normal auction URL renders the new form; 6500 retains legacy handling and legacy submission rejects 6501.
 - [x] Jonathan runs the normal upload workflow to prepare 6501 metadata, then chooses its closing time and signs auction/edition creation. Both canonical owner transactions and exact metadata are verified; both initially close 2026-10-20 at 22:44 UTC (6:44 PM EDT).
-- [ ] Rehearse the real wallet flow; enable and verify the public website at the agreed cutover.
+- [x] Enable and verify the public website at song 6501. Cloudflare version `5f099274-71a0-4d82-9a74-f51f40bca020` serves the new auction and edition flow on songaday.world; real chain data, exact deployed UI assets, desktop/mobile purchase entry and wallet dialogs were verified.
+- [ ] Jonathan signs a real collector edition purchase; verify the receipt and ownership. The website purchase helper simulation and synthetic-wallet lifecycle already pass.
 
 ## Dedicated deadline wallet
 
