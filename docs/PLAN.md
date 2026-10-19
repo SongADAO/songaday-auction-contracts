@@ -8,8 +8,8 @@
 - [x] Record baseline unit, fuzz, invariant, compiler and static-analysis results.
 - [x] Run independent adversarial review round with distinct attack surfaces.
 - [x] Reproduce candidates, harden the delivery-replay limitation, add regressions.
-- [ ] Repeat with fresh agents until a complete fresh round finds no confirmed security defect.
-- [ ] Publish reviewed source, ABI artifacts, round ledger and operator handoff.
+- [x] Repeat with fresh agents until a complete fresh round finds no confirmed security defect.
+- [x] Publish reviewed source, ABI artifacts, round ledger and operator handoff.
 
 No deployment, privileged-key use, live auction replacement, or Endaoment connection is authorized in this implementation phase.
 

@@ -1,0 +1,23 @@
+{
+  "reviewed_source_revision": "44f0635cb23ce7fc248983dee4748f9d56c9c76b",
+  "deployed": false,
+  "compiler": "0.8.30",
+  "evm_version": "cancun",
+  "optimizer_runs": 200,
+  "source_sha256": {
+    "src/SongADayAuction.sol": "f87bd693062e838680103d0affa930793f8cc3a4c1cb60f6ca6218b09d506513",
+    "src/SongADayEditions.sol": "b11f61a95086b2c1154343f4d2924c875928a73324613562465409e31a7e5943",
+    "integration/settlement-plan.mjs": "a4a9030cb1f096330e9db5180b4aa264f49d7a3bfc95f8b6d60f3c99c17f3251",
+    "integration/plan-settlement.mjs": "e5c5479b9c3d81bb9f4d50b070a59515139a48c0d5713847bff50524d349a00c",
+    "script/Deploy.s.sol": "3ea950d460763a2c23946d9774635270e3e71632ffb3f16c48706f203f498fa6",
+    "scripts/export-abi.mjs": "7b683945ef2fa86928cc0beb1701de07fefde8d8ebe0d95820a76148c0f1470e",
+    "foundry.toml": "25875a65e07ddfe20bb3b4c890a6062b9833a8cc609759d6042238cfe7c00124",
+    "foundry.lock": "64af4f5266859044992a384108ecee8efe8b147a0cf3c4ddb063a514899cc5ee",
+    "package.json": "1c0486c387183f61a6bf9b03b9c210096238f3ac724ee72a665407901e7645e8",
+    "package-lock.json": "9fd9799cd1eeb1026fb35eb4375fa76f68d529fe2ca4a87ca87cb02b646f5c3e"
+  },
+  "dependencies": {
+    "lib/openzeppelin-contracts": "cab19933c33c2ad1d4c7a84864a3601dddfd16f3",
+    "lib/forge-std": "f3dae6e6ee381f25eb6a246f7da9b85c91a68219"
+  }
+}
