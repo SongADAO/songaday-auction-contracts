@@ -1,0 +1,18 @@
+{
+  "name": "songaday-edition-deadlines",
+  "account_id": "a79a1faef6e8f94566f3320429d54006",
+  "main": "worker.mjs",
+  "compatibility_date": "2026-10-19",
+  "workers_dev": false,
+  "preview_urls": false,
+  "observability": { "enabled": true },
+  "triggers": { "crons": ["* * * * *"] },
+  "vars": {
+    "DEADLINE_RELAY_ENABLED": "true",
+    "DEADLINE_RELAY_EXECUTE": "false",
+    "DEADLINE_RELAY_ADDRESS": "0x20F4A0Afe41164cA73dD787Dd809419F1e87407C",
+    "AUCTION_ADDRESS": "0xFd8126142d2C6c4FA4c0DFe6694FF71413666D38",
+    "EDITIONS_ADDRESS": "0x3e290d6f5C66b1FAABd072Db9E0d223EDEfC7ab5",
+    "GOLDSKY_AUCTIONS_URL": "https://api.goldsky.com/api/public/project_cmit79ozucckp01w991mfehjs/subgraphs/songaday-conventional-base/1.0.0/gn"
+  }
+}

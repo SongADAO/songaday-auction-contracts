@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "deployedAt": "2026-10-19T20:25:52.135235Z",
+  "worker": "songaday-edition-deadlines",
+  "accountId": "a79a1faef6e8f94566f3320429d54006",
+  "versionId": "2423ad4e-c6ab-4ca2-b7eb-173d84d5ad75",
+  "mode": "dry-run",
+  "executionEnabled": false,
+  "publicHttpAccess": false,
+  "schedule": "* * * * *",
+  "scheduleRegisteredAt": "2026-10-19T20:25:54.288859Z",
+  "scheduledInvocationVerified": true,
+  "configuration": {
+    "DEADLINE_RELAY_ENABLED": "true",
+    "DEADLINE_RELAY_EXECUTE": "false",
+    "DEADLINE_RELAY_ADDRESS": "0x20F4A0Afe41164cA73dD787Dd809419F1e87407C",
+    "AUCTION_ADDRESS": "0xFd8126142d2C6c4FA4c0DFe6694FF71413666D38",
+    "EDITIONS_ADDRESS": "0x3e290d6f5C66b1FAABd072Db9E0d223EDEfC7ab5",
+    "GOLDSKY_AUCTIONS_URL": "https://api.goldsky.com/api/public/project_cmit79ozucckp01w991mfehjs/subgraphs/songaday-conventional-base/1.0.0/gn"
+  },
+  "secretBindings": [
+    "BASE_RPC_URL",
+    "MAINNET_RPC_URL",
+    "DEADLINE_RELAY_PRIVATE_KEY"
+  ],
+  "deployedModuleComparison": {
+    "worker.js": {
+      "matches": true,
+      "sha256": "f6e00a742533752c8397774122156061cb768e2d04375a741b61948225907dc2"
+    }
+  },
+  "localLiveDryRun": {
+    "checkedAt": "2026-10-19T20:25:18.811Z",
+    "status": "dry-run",
+    "results": []
+  },
+  "sourceReview": "Configuration, dedicated authority, live contract identities, and local/deployed module were independently checked; no confirmed blocker found. No secrets embedded in local or deployed source.",
+  "ownerActions": {
+    "grantDeadlineManager": "confirmed",
+    "grantTransactionHash": "0x62128a7a8ddff7b2b3ed6d24f3a41838d7b48384ebb21a1d8dac0a4112339041",
+    "grantBlock": "26229043",
+    "exactOwnerCall": true,
+    "canonicalTwoConfirmations": true,
+    "funding": "confirmed-balance",
+    "balanceWei": "1000000000000000",
+    "checkedAt": "2026-10-19T20:36:08.418Z",
+    "automatedTopUp": false
+  },
+  "remainingLiveValidation": [
+    "After actual auction and edition publication and role grant, verify a real per-song dry-run plan before enabling transaction execution."
+  ],
+  "scheduledInvocation": {
+    "eventTimestamp": 1792442111426,
+    "cron": "* * * * *",
+    "versionId": "2423ad4e-c6ab-4ca2-b7eb-173d84d5ad75",
+    "outcome": "ok",
+    "wallTimeMs": 490,
+    "cpuTimeMs": 3,
+    "exceptions": [],
+    "report": {
+      "status": "dry-run",
+      "results": []
+    }
+  }
+}

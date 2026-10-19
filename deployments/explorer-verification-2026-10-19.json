@@ -1,0 +1,135 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-10-19T20:25:35Z",
+  "reviewedSourceRevision": "08800637a08a832d121e9fbd7b62117fabd80e3e",
+  "sourceComparison": "Downloaded published sources were compared byte-for-byte against the locally reviewed sources; all files matched. Local metadata source hashes were independently checked before submission.",
+  "bytecodeComparison": "Published runtime bytecode hashes match the deployment record. Published creation inputs equal the reviewed init code plus the exact constructor arguments; creationCodeHash in the deployment record hashes init code before constructor arguments.",
+  "deployments": [
+    {
+      "contract": "SongADayAuction",
+      "chainId": 8453,
+      "address": "0xFd8126142d2C6c4FA4c0DFe6694FF71413666D38",
+      "transactionHash": "0x0498b661639c22b6bb75b2097c055b363d08ca5189a60208ddc0702c5765812a",
+      "deploymentBlock": "52825674",
+      "creationCodeHash": "0x5831cd16cf657c12951f18605584b160f90ea816fe95ef6ef0b64f3978a9eff4",
+      "runtimeCodeHash": "0xa9866af059d8db3305e57f36e3b8cedcea34bb034d966a6945679ffb8be485ac",
+      "compiler": {
+        "language": "Solidity",
+        "compiler": "solc",
+        "compilerVersion": "0.8.30+commit.73712a01",
+        "compilerSettings": {
+          "metadata": {
+            "bytecodeHash": "ipfs"
+          },
+          "libraries": {},
+          "optimizer": {
+            "runs": 200,
+            "enabled": true
+          },
+          "evmVersion": "cancun",
+          "remappings": [
+            "@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/",
+            "erc4626-tests/=lib/openzeppelin-contracts/lib/erc4626-tests/",
+            "forge-std/=lib/forge-std/src/",
+            "halmos-cheatcodes/=lib/openzeppelin-contracts/lib/halmos-cheatcodes/src/",
+            "openzeppelin-contracts/=lib/openzeppelin-contracts/"
+          ]
+        },
+        "name": "SongADayAuction",
+        "fullyQualifiedName": "src/SongADayAuction.sol:SongADayAuction"
+      },
+      "sourceFileCount": 10,
+      "sourcify": {
+        "status": "verified",
+        "match": "exact_match",
+        "creationMatch": "exact_match",
+        "runtimeMatch": "exact_match",
+        "verifiedAt": "2026-10-19T20:22:28Z",
+        "matchId": "56568050",
+        "verificationId": "ef3bf417-b8c5-4c2c-8b92-9fce2dad5714",
+        "sourceUrl": "https://repo.sourcify.dev/8453/0xFd8126142d2C6c4FA4c0DFe6694FF71413666D38",
+        "verificationApiUrl": "https://sourcify.dev/server/v2/verify/ef3bf417-b8c5-4c2c-8b92-9fce2dad5714",
+        "contractApiUrl": "https://sourcify.dev/server/v2/contract/8453/0xFd8126142d2C6c4FA4c0DFe6694FF71413666D38?fields=all"
+      },
+      "otherExplorers": {
+        "etherscan": {
+          "status": "not_verified_by_this_submission",
+          "reason": "Sourcify automatic propagation reported: Daily limit of 500 source code submissions reached."
+        },
+        "blockscout": {
+          "status": "not_verified_by_this_submission",
+          "reason": "HTTP 403 Cloudflare challenge blocked automatic propagation."
+        }
+      }
+    },
+    {
+      "contract": "SongADayEditions",
+      "chainId": 1,
+      "address": "0x3e290d6f5C66b1FAABd072Db9E0d223EDEfC7ab5",
+      "transactionHash": "0x576fcb07b0b790826077a081d4c5f7ae56dfcc942aa99030386585087d2195a8",
+      "deploymentBlock": "26228933",
+      "creationCodeHash": "0xfdfd267e4dc5e479c0f09abefed898865bf97c970ab65aa44a12f04ce8bca53c",
+      "runtimeCodeHash": "0x42b9aabc96729fdc095b4ccc0b51bb410f179753ce2e259f634c92fad48827e3",
+      "compiler": {
+        "language": "Solidity",
+        "compiler": "solc",
+        "compilerVersion": "0.8.30+commit.73712a01",
+        "compilerSettings": {
+          "metadata": {
+            "bytecodeHash": "ipfs"
+          },
+          "libraries": {},
+          "optimizer": {
+            "runs": 200,
+            "enabled": true
+          },
+          "evmVersion": "cancun",
+          "remappings": [
+            "@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/",
+            "erc4626-tests/=lib/openzeppelin-contracts/lib/erc4626-tests/",
+            "forge-std/=lib/forge-std/src/",
+            "halmos-cheatcodes/=lib/openzeppelin-contracts/lib/halmos-cheatcodes/src/",
+            "openzeppelin-contracts/=lib/openzeppelin-contracts/"
+          ]
+        },
+        "name": "SongADayEditions",
+        "fullyQualifiedName": "src/SongADayEditions.sol:SongADayEditions"
+      },
+      "sourceFileCount": 27,
+      "sourcify": {
+        "status": "verified",
+        "match": "exact_match",
+        "creationMatch": "exact_match",
+        "runtimeMatch": "exact_match",
+        "verifiedAt": "2026-10-19T20:23:38Z",
+        "matchId": "56568108",
+        "verificationId": "ffd978ef-8669-48ec-8842-bba5ffec9a4a",
+        "sourceUrl": "https://repo.sourcify.dev/1/0x3e290d6f5C66b1FAABd072Db9E0d223EDEfC7ab5",
+        "verificationApiUrl": "https://sourcify.dev/server/v2/verify/ffd978ef-8669-48ec-8842-bba5ffec9a4a",
+        "contractApiUrl": "https://sourcify.dev/server/v2/contract/1/0x3e290d6f5C66b1FAABd072Db9E0d223EDEfC7ab5?fields=all"
+      },
+      "otherExplorers": {
+        "etherscan": {
+          "status": "not_verified_by_this_submission",
+          "reason": "Sourcify automatic propagation reported: Daily limit of 500 source code submissions reached."
+        },
+        "blockscout": {
+          "status": "not_verified_by_this_submission",
+          "reason": "HTTP 429 rate limit blocked automatic propagation."
+        },
+        "routescan": {
+          "status": "verified",
+          "result": "Pass - Verified",
+          "contractName": "SongADayEditions",
+          "compilerVersion": "v0.8.30+commit.73712a01",
+          "sourceUrl": "https://routescan.io/address/0x3e290d6f5C66b1FAABd072Db9E0d223EDEfC7ab5?chainid=1",
+          "verificationApiUrl": "https://api.routescan.io/v2/network/mainnet/evm/1/etherscan/api?module=contract&action=checkverifystatus&chainid=1&guid=bc47b435-e8b6-5aee-8ec5-d765963d395e"
+        }
+      }
+    }
+  ],
+  "documentation": [
+    "https://docs.sourcify.dev/docs/api/",
+    "https://docs.blockscout.com/devs/verification/foundry-verification"
+  ]
+}

@@ -7,7 +7,9 @@ Jonathan deployed both contracts with Rabby on 2026-10-19. Their creation transa
 | Auction | Base (8453) | `0xFd8126142d2C6c4FA4c0DFe6694FF71413666D38` | `52825674` |
 | Soulbound editions | Ethereum (1) | `0x3e290d6f5C66b1FAABd072Db9E0d223EDEfC7ab5` | `26228933` |
 
-The public cutover remains disabled. Index and relay deployment, explorer source publication, and a live wallet rehearsal remain pending. The original mainnet collection remains `0x19b703f65aA7E1E775BD06c2aa0D0d08c80f1C45`.
+Both contracts have public source verification with exact creation and runtime matches on Sourcify: [Base auction](https://repo.sourcify.dev/8453/0xFd8126142d2C6c4FA4c0DFe6694FF71413666D38) and [mainnet editions](https://repo.sourcify.dev/1/0x3e290d6f5C66b1FAABd072Db9E0d223EDEfC7ab5). The editions are also [verified on Routescan](https://routescan.io/address/0x3e290d6f5C66b1FAABd072Db9E0d223EDEfC7ab5?chainid=1). Downloaded published sources match the reviewed files byte-for-byte. See the [verification evidence](../deployments/explorer-verification-2026-10-19.json), including the quota/access errors that prevented automatic Etherscan and Blockscout propagation.
+
+The public cutover remains disabled. The Goldsky index is deployed and healthy, and the deadline Worker is deployed with sending disabled. The dedicated wallet has its restricted role and initial gas funding. A real per-song dry run and wallet lifecycle rehearsal remain pending; see [infrastructure progress](LAUNCH-INFRASTRUCTURE.md). The original mainnet collection remains `0x19b703f65aA7E1E775BD06c2aa0D0d08c80f1C45`.
 
 ## Product choices still to confirm
 
