@@ -1,0 +1,17 @@
+{
+  "name": "songaday-auction-contracts",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "engines": {"node": ">=22"},
+  "scripts": {
+    "test": "forge test && node --test integration/*.test.mjs",
+    "test:contracts": "forge test",
+    "test:integration": "node --test integration/*.test.mjs",
+    "build": "forge build",
+    "format:check": "forge fmt --check",
+    "export:abi": "node scripts/export-abi.mjs"
+  },
+  "dependencies": {"viem": "2.57.7"}
+}
