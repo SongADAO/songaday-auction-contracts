@@ -1,23 +1,36 @@
 {
-  "reviewed_source_revision": "44f0635cb23ce7fc248983dee4748f9d56c9c76b",
+  "reviewed_source_revision": "08800637a08a832d121e9fbd7b62117fabd80e3e",
   "deployed": false,
   "compiler": "0.8.30",
   "evm_version": "cancun",
   "optimizer_runs": 200,
   "source_sha256": {
-    "src/SongADayAuction.sol": "f87bd693062e838680103d0affa930793f8cc3a4c1cb60f6ca6218b09d506513",
-    "src/SongADayEditions.sol": "b11f61a95086b2c1154343f4d2924c875928a73324613562465409e31a7e5943",
-    "integration/settlement-plan.mjs": "a4a9030cb1f096330e9db5180b4aa264f49d7a3bfc95f8b6d60f3c99c17f3251",
+    "src/SongADayAuction.sol": "bca46593b2d911e28c4b29f2f467777a3a7b0a27011edaf998fce9bfd4d86f77",
+    "src/SongADayEditions.sol": "41c6b26919fcb27833ea3390ad865a0abbfeb676725c1468e521b087ac5824e1",
+    "integration/settlement-plan.mjs": "c6226e6d60b68761acd146f500802b848e4679d47208078b3075d977d5fbbbe0",
     "integration/plan-settlement.mjs": "e5c5479b9c3d81bb9f4d50b070a59515139a48c0d5713847bff50524d349a00c",
     "script/Deploy.s.sol": "3ea950d460763a2c23946d9774635270e3e71632ffb3f16c48706f203f498fa6",
     "scripts/export-abi.mjs": "7b683945ef2fa86928cc0beb1701de07fefde8d8ebe0d95820a76148c0f1470e",
     "foundry.toml": "25875a65e07ddfe20bb3b4c890a6062b9833a8cc609759d6042238cfe7c00124",
     "foundry.lock": "64af4f5266859044992a384108ecee8efe8b147a0cf3c4ddb063a514899cc5ee",
-    "package.json": "1c0486c387183f61a6bf9b03b9c210096238f3ac724ee72a665407901e7645e8",
-    "package-lock.json": "9fd9799cd1eeb1026fb35eb4375fa76f68d529fe2ca4a87ca87cb02b646f5c3e"
+    "package.json": "0c9fbaba7c702e3649323435d64c2614c67a65bf98dd23e48eb548716c13c72a",
+    "package-lock.json": "9fd9799cd1eeb1026fb35eb4375fa76f68d529fe2ca4a87ca87cb02b646f5c3e",
+    "integration/deadline-plan.mjs": "c6934493bd8ac493d606f8e503c664ed7b5b42eb679bb460af2340d00f08ca2f",
+    "relay/run.mjs": "020b68684e2eeb1e60413fa60894cbf79e8f4b7cc3f00e9b86ca9f69d21bbacb",
+    "relay/worker.mjs": "899752c6694fd969a20536e4a3d8a6d1f4733002abbd27b6300b993d171b8f12",
+    "relay/wrangler.jsonc": "154b6232e6944f84bd45fffe4c263a8f53bacd5e998ea3514f2e014f9c3da94f",
+    "artifacts/SongADayAuction.abi.json": "813aba5a2ce8deeceab64d283657bf5d1348442b8c104b6cd9f6106f36712789",
+    "artifacts/SongADayEditions.abi.json": "e66e93b78aa39d8e706d9728c1a622e946194ec70096de808fa851e0099f2ab4"
   },
   "dependencies": {
     "lib/openzeppelin-contracts": "cab19933c33c2ad1d4c7a84864a3601dddfd16f3",
     "lib/forge-std": "f3dae6e6ee381f25eb6a246f7da9b85c91a68219"
+  },
+  "validation": {
+    "solidity_tests_with_original_fork": 74,
+    "node_integration_tests": 42,
+    "local_two_chain_rehearsal": "passed",
+    "fresh_clean_contract_reviewers": 3,
+    "live_deployment": false
   }
 }
