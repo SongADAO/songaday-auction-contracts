@@ -3,16 +3,16 @@
   "deployedAt": "2026-10-19T20:25:52.135235Z",
   "worker": "songaday-edition-deadlines",
   "accountId": "a79a1faef6e8f94566f3320429d54006",
-  "versionId": "2423ad4e-c6ab-4ca2-b7eb-173d84d5ad75",
-  "mode": "dry-run",
-  "executionEnabled": false,
+  "versionId": "8a4dde36-61fd-4cf7-a6f6-6e7193e60456",
+  "mode": "execution-enabled",
+  "executionEnabled": true,
   "publicHttpAccess": false,
   "schedule": "* * * * *",
   "scheduleRegisteredAt": "2026-10-19T20:25:54.288859Z",
   "scheduledInvocationVerified": true,
   "configuration": {
     "DEADLINE_RELAY_ENABLED": "true",
-    "DEADLINE_RELAY_EXECUTE": "false",
+    "DEADLINE_RELAY_EXECUTE": "true",
     "DEADLINE_RELAY_ADDRESS": "0x20F4A0Afe41164cA73dD787Dd809419F1e87407C",
     "AUCTION_ADDRESS": "0xFd8126142d2C6c4FA4c0DFe6694FF71413666D38",
     "EDITIONS_ADDRESS": "0x3e290d6f5C66b1FAABd072Db9E0d223EDEfC7ab5",
@@ -26,13 +26,20 @@
   "deployedModuleComparison": {
     "worker.js": {
       "matches": true,
-      "sha256": "f6e00a742533752c8397774122156061cb768e2d04375a741b61948225907dc2"
+      "sha256": "f6e00a742533752c8397774122156061cb768e2d04375a741b61948225907dc2",
+      "embeddedSecretValueCount": 0
     }
   },
   "localLiveDryRun": {
-    "checkedAt": "2026-10-19T20:25:18.811Z",
+    "checkedAt": "2026-10-19T21:45:27.111Z",
     "status": "dry-run",
-    "results": []
+    "results": [
+      {
+        "songId": "6501",
+        "status": "in-sync",
+        "executed": false
+      }
+    ]
   },
   "sourceReview": "Configuration, dedicated authority, live contract identities, and local/deployed module were independently checked; no confirmed blocker found. No secrets embedded in local or deployed source.",
   "ownerActions": {
@@ -43,13 +50,14 @@
     "canonicalTwoConfirmations": true,
     "funding": "confirmed-balance",
     "balanceWei": "1000000000000000",
-    "checkedAt": "2026-10-19T20:36:08.418Z",
+    "checkedAt": "2026-10-19T21:45:45.015Z",
     "automatedTopUp": false
   },
   "remainingLiveValidation": [
-    "After actual auction and edition publication and role grant, verify a real per-song dry-run plan before enabling transaction execution."
+    "Observe a real late-bid extension and the final close when those events occur; no artificial live bid or deadline change was made."
   ],
-  "scheduledInvocation": {
+  "initialDryRunVersionId": "2423ad4e-c6ab-4ca2-b7eb-173d84d5ad75",
+  "initialScheduledDryRun": {
     "eventTimestamp": 1792442111426,
     "cron": "* * * * *",
     "versionId": "2423ad4e-c6ab-4ca2-b7eb-173d84d5ad75",
@@ -61,5 +69,76 @@
       "status": "dry-run",
       "results": []
     }
+  },
+  "executionEnabledAt": "2026-10-19T21:46:00.590476Z",
+  "authorization": "Jonathan confirmed both song 6501 creation transactions and authorized launch. The actual per-song production dry run returned in-sync with no calls before enabling the previously reviewed restricted deadline automation.",
+  "productionConfigurationVerification": {
+    "publicBindingsMatch": true,
+    "secretBindings": [
+      "BASE_RPC_URL",
+      "DEADLINE_RELAY_PRIVATE_KEY",
+      "MAINNET_RPC_URL"
+    ],
+    "schedules": {
+      "schedules": [
+        {
+          "cron": "* * * * *",
+          "created_on": "2026-10-19T20:25:54.288859Z",
+          "modified_on": "2026-10-19T20:25:54.288859Z"
+        }
+      ]
+    },
+    "subdomain": {
+      "enabled": false,
+      "previews_enabled": false
+    },
+    "compatibilityDate": "2026-10-19",
+    "observability": {
+      "enabled": true,
+      "head_sampling_rate": 1,
+      "redact_query_string": false,
+      "logs": {
+        "enabled": true,
+        "head_sampling_rate": 1,
+        "persist": true,
+        "invocation_logs": true
+      },
+      "traces": {
+        "enabled": false,
+        "persist": true,
+        "head_sampling_rate": 1
+      }
+    }
+  },
+  "firstLiveSong": {
+    "songId": "6501",
+    "evidence": "song-6501-2026-10-19.json",
+    "deadlineStatus": "in-sync",
+    "endTimeUTC": "2026-10-20T22:44:00.000Z"
+  },
+  "scheduledInvocation": {
+    "eventTimestamp": 1792446429829,
+    "checkedAt": "2026-10-19T21:47:09.829000+00:00",
+    "cron": "* * * * *",
+    "versionId": "8a4dde36-61fd-4cf7-a6f6-6e7193e60456",
+    "outcome": "ok",
+    "wallTimeMs": 2019,
+    "cpuTimeMs": 54,
+    "exceptions": [],
+    "report": {
+      "status": "execution-enabled",
+      "results": [
+        {
+          "songId": "6501",
+          "status": "in-sync",
+          "executed": false
+        }
+      ]
+    }
+  },
+  "postActivationWalletCheck": {
+    "checkedAt": "2026-10-19T21:48:19.014Z",
+    "balanceWei": "1000000000000000",
+    "nonce": 0
   }
 }

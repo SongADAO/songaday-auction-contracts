@@ -1,0 +1,173 @@
+{
+  "schemaVersion": 1,
+  "songId": "6501",
+  "checkedAt": "2026-10-19T21:45:45.015Z",
+  "auction": {
+    "startTime": "1792446127",
+    "endTime": "1792536240",
+    "incrementBps": 100,
+    "extensionWindow": 900,
+    "highestBid": "0",
+    "bidder": "0x0000000000000000000000000000000000000000",
+    "recipient": "0x0000000000000000000000000000000000000000",
+    "beneficiary": "0x42469B0A89cE1215E72AD1f8f5D03aD4776c1fcb",
+    "settled": false,
+    "cancelled": false,
+    "metadataURI": "ipfs://bafkreihxyis2qa6cfbge6ody3wfhrihfamn5m2zd4g62ylyxxo64hwx5ua"
+  },
+  "edition": {
+    "price": "416158648393860",
+    "openedAt": "1792446143",
+    "closesAt": "1792536240",
+    "supporterRevision": "0",
+    "metadataURI": "ipfs://bafkreie2iinf66dbpx5cdw2sii3biwdkwuimpsk5e6idlgfydmtq7cq7dy",
+    "registered": true
+  },
+  "auctionCreation": {
+    "transactionHash": "0x2849430bdb5557413a27c92f461493d85178109777a4816d96027017e0209da6",
+    "blockNumber": "52828390",
+    "blockHash": "0xae200b9889948d198ab8ef97cda130ff1508714165c22e0c550347229ff875e4",
+    "blockTime": "2026-10-19T21:42:07.000Z",
+    "status": "success",
+    "canonical": true,
+    "confirmations": "85",
+    "from": "0xaba3a04fc85fd7bbc2538e708e9e30bbc59899c3",
+    "to": "0xfd8126142d2c6c4fa4c0dfe6694ff71413666d38",
+    "value": "0",
+    "ownerSender": true,
+    "functionName": "createAuction",
+    "args": [
+      "6501",
+      "0",
+      "1792536240",
+      100,
+      900,
+      "ipfs://bafkreihxyis2qa6cfbge6ody3wfhrihfamn5m2zd4g62ylyxxo64hwx5ua"
+    ],
+    "event": {
+      "songId": "6501",
+      "beneficiary": "0x42469B0A89cE1215E72AD1f8f5D03aD4776c1fcb",
+      "startTime": "1792446127",
+      "endTime": "1792536240",
+      "incrementBps": 100,
+      "extensionWindow": 900,
+      "metadataURI": "ipfs://bafkreihxyis2qa6cfbge6ody3wfhrihfamn5m2zd4g62ylyxxo64hwx5ua"
+    }
+  },
+  "editionRegistration": {
+    "transactionHash": "0xe4778751b94b2929fc5ff2679fd3aaecae215db577d38360d0d0d1424e58a575",
+    "blockNumber": "26229379",
+    "blockHash": "0x97951d448b5ca2bce38a022ec7f916c657006f70a170fac20f8abf77537d2c4b",
+    "blockTime": "2026-10-19T21:42:23.000Z",
+    "status": "success",
+    "canonical": true,
+    "confirmations": "13",
+    "from": "0xaba3a04fc85fd7bbc2538e708e9e30bbc59899c3",
+    "to": "0x3e290d6f5c66b1faabd072db9e0d223edefc7ab5",
+    "value": "0",
+    "ownerSender": true,
+    "functionName": "registerEdition",
+    "args": [
+      "6501",
+      "416158648393860",
+      "1792536240",
+      "ipfs://bafkreie2iinf66dbpx5cdw2sii3biwdkwuimpsk5e6idlgfydmtq7cq7dy"
+    ],
+    "event": {
+      "songId": "6501",
+      "price": "416158648393860",
+      "openedAt": "1792446143",
+      "closesAt": "1792536240",
+      "supporterRevision": "0",
+      "metadataURI": "ipfs://bafkreie2iinf66dbpx5cdw2sii3biwdkwuimpsk5e6idlgfydmtq7cq7dy"
+    }
+  },
+  "matchingEnd": true,
+  "endTimeUTC": "2026-10-20T22:44:00.000Z",
+  "editionPriceETH": "0.00041615864839386",
+  "relay": {
+    "address": "0x20F4A0Afe41164cA73dD787Dd809419F1e87407C",
+    "balanceWei": "1000000000000000",
+    "nonce": 0,
+    "deadlineManagers": true,
+    "editionManagers": false,
+    "supporterManagers": false
+  },
+  "deadlinePlan": {
+    "schemaVersion": 1,
+    "mode": "unsigned-dry-run",
+    "executionStatus": "not-submitted",
+    "chainId": 1,
+    "songId": "6501",
+    "auctionAddress": "0xFd8126142d2C6c4FA4c0DFe6694FF71413666D38",
+    "editionsAddress": "0x3e290d6f5C66b1FAABd072Db9E0d223EDEfC7ab5",
+    "caller": "0x20F4A0Afe41164cA73dD787Dd809419F1e87407C",
+    "auctionEnd": "1792536240",
+    "editionEnd": "1792536240",
+    "snapshots": {
+      "base": {
+        "number": "52828481",
+        "hash": "0x4620d978fb8fe9e7acb65a918d1e9661173ff8bcfeadd20fa39888452b888678",
+        "timestamp": "1792446309"
+      },
+      "mainnet": {
+        "number": "26229393",
+        "hash": "0xfbff274815a1af76d58f19023b161f1b2da749751d43b246e7475153bd4c9b9b",
+        "timestamp": "1792446311"
+      }
+    },
+    "calls": [],
+    "notes": [
+      "Trusted relay: two Base confirmations for extensions, finalized Base state for permanent closing. Rebuild immediately before signing; never execute a queued stale plan."
+    ],
+    "status": "in-sync"
+  },
+  "productionTickDryRun": {
+    "checkedAt": "2026-10-19T21:45:27.111Z",
+    "status": "dry-run",
+    "results": [
+      {
+        "songId": "6501",
+        "status": "in-sync",
+        "executed": false
+      }
+    ]
+  },
+  "index": {
+    "checkedAt": "2026-10-19T21:45:27.484Z",
+    "httpStatus": 200,
+    "data": {
+      "auctions": [
+        {
+          "id": "6501",
+          "songId": "6501",
+          "contractAddress": "0xfd8126142d2c6c4fa4c0dfe6694ff71413666d38",
+          "startTime": "1792446127",
+          "endTime": "1792536240",
+          "incrementBps": 100,
+          "extensionWindow": "900",
+          "beneficiary": "0x42469b0a89ce1215e72ad1f8f5d03ad4776c1fcb",
+          "metadataURI": "ipfs://bafkreihxyis2qa6cfbge6ody3wfhrihfamn5m2zd4g62ylyxxo64hwx5ua",
+          "highestBid": "0",
+          "bidder": "0x0000000000000000000000000000000000000000",
+          "recipient": "0x0000000000000000000000000000000000000000",
+          "settled": false,
+          "cancelled": false
+        }
+      ],
+      "bids": [],
+      "_meta": {
+        "block": {
+          "number": 52828489,
+          "hash": "0xa3051dd9afbe04ffc658fb11bfb1977fa9e6d241487bb2efaa48a26e9e66c6a9"
+        },
+        "deployment": "QmcYRLUgScDpETxhKpuLrry5KGSp8NR66whFxQtFWnJSW2",
+        "hasIndexingErrors": false
+      }
+    },
+    "canonicalBlockHashMatches": true,
+    "indexLagBlocks": "9",
+    "hasIndexingErrors": false,
+    "auctionFieldMismatches": []
+  }
+}
